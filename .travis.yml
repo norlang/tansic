@@ -1,0 +1,50 @@
+language: cpp
+compiler:
+  - gcc
+os:
+  - linux
+  - windows
+
+before_install:
+  # GCC 4.9.x
+  - if [ "$CXX" = "g++" ]; then sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y; fi
+  - if [ "$CXX" = "g++" ]; then sudo apt-get update -qq; fi
+  - if [ "$CXX" = "g++" ]; then sudo apt-get install -qq g++-4.9; fi
+  - if [ "$CXX" = "g++" ]; then sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 50; fi
+  - if [ "$CXX" = "g++" ]; then sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.9 50; fi
+  # Setup Git user (needed for cherry-pick)
+  - git config --global user.name "Travis CI"
+  - git config --global user.email "travis-ci@localhost"
+  # Qt
+  - cd ..
+  # qtbase
+  - git clone --depth 1 --branch dev git://gitorious.org/qt/qtbase.git
+  - cd qtbase
+  - git log -n1
+  - ./configure -prefix ~/qt -nomake examples -nomake tests -opensource -confirm-license -release -qt-xcb -no-widgets -no-dbus
+  - make -j2
+  - make install
+  - cd ..
+  - rm -rf qtbase
+  # qtdeclarative
+  - git clone --depth 1 --branch dev git://gitorious.org/qt/qtdeclarative.git
+  - cd qtdeclarative
+  - git log -n1
+  # https://codereview.qt-project.org/100434
+  - git fetch --depth 1 https://codereview.qt-project.org/qt/qtdeclarative refs/changes/34/100434/4 && git cherry-pick FETCH_HEAD
+  - ~/qt/bin/qmake
+  - make -j2
+  - make install
+  - cd ..
+  - rm -rf qtdeclarative
+  # return to node.qml dir
+  - cd node.qml
+  
+before_script:
+  - mkdir build
+  - cd build
+  - cmake
+  
+script:
+  - ~/qt/bin/qmake
+  - make -j2
