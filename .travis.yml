@@ -1,50 +1,57 @@
+version: '{build}'
+
 language: cpp
-compiler:
-  - gcc
-os:
-  - linux
-  - windows
+
+init:
+- git config --global core.autocrlf input
+
+environment:
+  matrix:
+  - QT5: C:\Qt\5.3\mingw482_32
+    MINGW: C:\Qt\Tools\mingw482_32
+  - QT5: C:\Qt\5.4\mingw491_32
+    MINGW: C:\Qt\Tools\mingw491_32
+  - QT5: C:\Qt\5.5\mingw492_32
+    MINGW: C:\Qt\Tools\mingw492_32
+  - QT5: C:\Qt\5.6\mingw49_32
+    MINGW: C:\Qt\Tools\mingw492_32
+  - QT5: C:\Qt\5.7\mingw53_32
+    MINGW: C:\Qt\Tools\mingw530_32
+  - os: linux
+    dist: trusty
+    sudo: required
+    compiler: gcc
+    env:
+     - QT_BASE=59 USE_CMAKE=true
+  - os: osx
+    compiler: clang
+    env:
+     - QT_BASE=59
+
+matrix:
+  fast_finish: true
+
+before_build:
+  - set PATH=%MINGW%\bin;%QT5%\bin;%PATH%
 
 before_install:
-  # GCC 4.9.x
-  - if [ "$CXX" = "g++" ]; then sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y; fi
-  - if [ "$CXX" = "g++" ]; then sudo apt-get update -qq; fi
-  - if [ "$CXX" = "g++" ]; then sudo apt-get install -qq g++-4.9; fi
-  - if [ "$CXX" = "g++" ]; then sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 50; fi
-  - if [ "$CXX" = "g++" ]; then sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.9 50; fi
-  # Setup Git user (needed for cherry-pick)
-  - git config --global user.name "Travis CI"
-  - git config --global user.email "travis-ci@localhost"
-  # Qt
-  - cd ..
-  # qtbase
-  - git clone --depth 1 --branch 5.10 git://github.com/qt/qtbase.git
-  - cd qtbase
-  - git log -n1
-  - ./configure -prefix ~/qt -nomake examples -nomake tests -opensource -confirm-license -release -qt-xcb -no-widgets -no-dbus
-  - make -j2
-  - make install
-  - cd ..
-  - rm -rf qtbase
-  # qtdeclarative
-  - git clone --depth 1 --branch 5.10 git://github.com/qt/qtdeclarative.git
-  - cd qtdeclarative
-  - git log -n1
-  # https://codereview.qt-project.org/100434
-  - git fetch --depth 1 https://codereview.qt-project.org/qt/qtdeclarative refs/changes/34/100434/4 && git cherry-pick FETCH_HEAD
-  - ~/qt/bin/qmake
-  - make -j2
-  - make install
-  - cd ..
-  - rm -rf qtdeclarative
-  # return to node.qml dir
-  - cd node.qml
-  
-before_script:
-  - mkdir build
-  - cd build
-  - cmake
-  
-script:
-  - ~/qt/bin/qmake
-  - make -j2
+  - if [[ "$QT_BASE" = "48" && "$TRAVIS_OS_NAME" = "linux" ]]; then sudo add-apt-repository ppa:beineri/opt-qt487-trusty -y; fi
+  - if [ "$QT_BASE" = "51" ]; then sudo add-apt-repository ppa:beineri/opt-qt511-trusty -y; fi
+  - if [ "$QT_BASE" = "52" ]; then sudo add-apt-repository ppa:beineri/opt-qt521-trusty -y; fi
+  - if [ "$QT_BASE" = "53" ]; then sudo add-apt-repository ppa:beineri/opt-qt532-trusty -y; fi
+  - if [ "$QT_BASE" = "54" ]; then sudo add-apt-repository ppa:beineri/opt-qt542-trusty -y; fi
+  - if [[ "$QT_BASE" = "55" && "$TRAVIS_OS_NAME" = "linux" ]]; then sudo add-apt-repository ppa:beineri/opt-qt551-trusty -y; fi
+  - if [ "$QT_BASE" = "56" ]; then sudo add-apt-repository ppa:beineri/opt-qt562-trusty -y; fi
+  - if [[ "$QT_BASE" = "57" && "$TRAVIS_OS_NAME" = "linux" ]]; then sudo add-apt-repository ppa:beineri/opt-qt571-trusty -y; fi
+  - if [[ "$QT_BASE" = "58" && "$TRAVIS_OS_NAME" = "linux" ]]; then sudo add-apt-repository ppa:beineri/opt-qt58-trusty -y; fi
+  - if [[ "$QT_BASE" = "59" && "$TRAVIS_OS_NAME" = "linux" ]]; then sudo add-apt-repository ppa:beineri/opt-qt591-trusty -y; fi
+  - if [ "$TRAVIS_OS_NAME" = "linux" ]; then
+      sudo apt-get update -qq;
+    else
+      brew update;
+    fi
+
+build_script:
+- qmake -v
+- qmake -r
+- mingw32-make
