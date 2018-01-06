@@ -1,0 +1,18 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>MainBackground.qml</file>
+        <file>VisualNavigationContainer.qml</file>
+        <file>VisualNavigationContainerForm.ui.qml</file>
+        <file>TansicStatusBar.qml</file>
+        <file>TansicStatusBarForm.ui.qml</file>
+        <file>SettingsButton.qml</file>
+        <file>MenuButton.qml</file>
+        <file>MenuButtonForm.ui.qml</file>
+        <file>qtquickcontrols2.conf</file>
+        <file>TaskButton.qml</file>
+        <file>SettingsPageMain.qml</file>
+        <file>SettingsPageMainForm.ui.qml</file>
+        <file>SettingsPage.qml</file>
+    </qresource>
+</RCC>

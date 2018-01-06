@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>assets/logo/iccas_logo.png</file>
+        <file>assets/logo/mevis_logo.png</file>
+        <file>assets/logo/iccas_logo2.png</file>
+        <file>assets/logo/mevis_logo.svg</file>
+    </qresource>
+</RCC>

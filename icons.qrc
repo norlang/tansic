@@ -1,0 +1,22 @@
+<RCC>
+    <qresource prefix="/">
+        <file>assets/icons/apps.svg</file>
+        <file>assets/icons/desktop-classic.svg</file>
+        <file>assets/icons/desktop-mac.svg</file>
+        <file>assets/icons/desktop-tower.svg</file>
+        <file>assets/icons/record.svg</file>
+        <file>assets/icons/settings.svg</file>
+        <file>assets/icons/settings-box.svg</file>
+        <file>assets/icons/volume.svg</file>
+        <file>assets/icons/volume-high.svg</file>
+        <file>assets/icons/volume-low.svg</file>
+        <file>assets/icons/volume-medium.svg</file>
+        <file>assets/icons/volume-minus.svg</file>
+        <file>assets/icons/volume-mute.svg</file>
+        <file>assets/icons/volume-off.svg</file>
+        <file>assets/icons/volume-plus.svg</file>
+        <file>Icon.js</file>
+        <file>materialdesignicons-webfont.ttf</file>
+        <file>MaterialIcons-Regular.ttf</file>
+    </qresource>
+</RCC>
